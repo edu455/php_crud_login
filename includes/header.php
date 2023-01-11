@@ -1,4 +1,4 @@
-<?php require 'php_scripts/database.php';?>
+<?php require 'php_scripts/database.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,14 +20,30 @@
             <div class=" collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">HOME</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">HOME</a>
                     </li>
+                    <?php if(isset($_SESSION['role'])): ?>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">PROFILE</a>
+                        <a class="nav-link active" href="profile.php">PROFILE</a>
                     </li>
+                    <?php endif;?>
+                    <?php if(isset($_SESSION['role'])&&$_SESSION['role']=='admin'): ?>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">CRUD</a>
+                        <a class="nav-link active" href="crud.php">CRUD</a>
                     </li>
+                    <?php endif;?>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="about.php">ABOUT</a>
+                    </li>
+                    <?php if (isset($_SESSION['role'])) : ?>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="logout.php">LOGOUT</a>
+                        </li>
+                    <?php else : ?>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="login.php">LOGIN</a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

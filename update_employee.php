@@ -1,11 +1,15 @@
 <?php
 include 'includes/header.php';
 require_once 'php_scripts/functions.php';
+if(isset($_SESSION['role'])&&$_SESSION['role']!=='admin'||!isset($_SESSION['role'])){
+    header('Location: index.php');
+    exit();
+}
 $errors = [];
 if (isset($_GET['id']) && fetch_user($_GET['id'])) {
     $user = fetch_user($_GET['id']);
 } else {
-    header('Location: index.php');
+    header('Location: crud.php');
     exit();
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit']) && fetch_user($_GET['id'])) {
@@ -83,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit']) && fetch_us
     if (empty($errors) && fetch_user($id)) {
         move_uploaded_file($_FILES['image']['tmp_name'], 'assets/images/' . $image_name);
         update_user($id, $username, $firstname, $lastname, $email, $password, $image_name, $role);
-        header('Location: index.php');
+        header('Location: crud.php');
     }
 }
 

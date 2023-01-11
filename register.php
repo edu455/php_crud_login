@@ -1,21 +1,22 @@
 <?php
 include 'includes/header.php';
 require_once 'php_scripts/functions.php';
-if(isset($_SESSION['role'])&&$_SESSION['role']!=='admin'||!isset($_SESSION['role'])){
+$erros = [];
+if (isset($_SESSION['role'])) {
     header('Location: index.php');
     exit();
 }
-$errors=[];
+$errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $username = validate_post_input('username');
     $firstname = validate_post_input('firstname');
     $lastname = validate_post_input('lastname');
     $email = validate_post_input('email');
     $password = validate_post_input('password');
-    $role = $_POST['role'];
+    $role = 'user';
     //Validating image
     if (empty($_FILES['image']['name'])) {
-        $image_ext ='png';
+        $image_ext = 'png';
         $image_hash = 'default_profile_image';
     } else {
         $image_ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
@@ -80,53 +81,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     if (empty($errors)) {
         move_uploaded_file($_FILES['image']['tmp_name'], 'assets/images/' . $image_name);
         insert_user($username, $firstname, $lastname, $email, $password, $image_name, $role);
-        header('Location: crud.php');
+        $user = login_user($username, $password);
+        $_SESSION['id'] = $user['id'];
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['firstname'] = $user['firstname'];
+        $_SESSION['lastname'] = $user['lastname'];
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['role'] = $user['role'];
+        $_SESSION['image'] = $user['image'];
+        header('Location: index.php');
     }
 }
 ?>
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-body">
-            <form action="" method="POST" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" >
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Register</h3>
                 </div>
-                <div class="mb-3">
-                    <label for="firstname" class="form-label">Firstname</label>
-                    <input type="text" class="form-control" id="firstname" name="firstname" >
+                <div class="card-body">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username">
+                        </div>
+                        <div class="mb-3">
+                            <label for="firstname" class="form-label">Firstname</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname">
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastname" class="form-label">Lastname</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image</label>
+                            <input type="file" class="form-control" id="image" name="image">
+                        </div>
+                        <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                    </form>
+                    <a href="register.php">Already registered?Log in</a>
                 </div>
-                <div class="mb-3">
-                    <label for="lastname" class="form-label">Lastname</label>
-                    <input type="text" class="form-control" id="lastname" name="lastname" >
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" >
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" >
-                </div>
-                <div class="mb-3">
-                    <label for="image" class="form-label">Image</label>
-                    <input type="file" class="form-control" id="image" name="image">
-                </div>
-                <div class="mb-3 form-check">
-                    <label for="role" class="form-label">Role</label>
-                    <select name="role" id="role" class="form-control">
-                        <option value="admin">Admin</option>
-                        <option value="user">User</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
-
 </div>
-
-
 
 
 <?php

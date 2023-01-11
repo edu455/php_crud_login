@@ -1,4 +1,21 @@
 <?php
+function login_user($username,$password){
+    global $conn;
+    $query='SELECT * FROM employees WHERE username=? AND password=?';
+    $stmt=mysqli_prepare($conn,$query);
+    $stmt->bind_param('ss',$username,$password);
+    if($stmt->execute()){
+        $result=$stmt->get_result();
+        if($result->num_rows>0){
+            return $result->fetch_assoc();
+        }else{
+            return [];
+        }
+    }
+    else{
+        die("Error: ".$stmt->error);
+    }
+}
 function validate_post_input($data){
     $input=$_POST[$data]??='';
     return htmlspecialchars(stripslashes($input));
