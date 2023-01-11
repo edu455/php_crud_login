@@ -28,12 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     }
     $image_name = $image_hash . '.' . $image_ext;
 
-    var_dump($username);
-    var_dump($firstname);
-    var_dump($lastname);
-    var_dump($email);
-    var_dump($password);
-    var_dump($role);
+    
     //Sanitizing user
     if (!$username) {
         $errors['username'] = 'Username is required';
