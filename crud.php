@@ -1,7 +1,7 @@
 <?php
 include 'includes/header.php';
 require_once 'php_scripts/functions.php';
-if(isset($_SESSION['role'])&&$_SESSION['role']!=='admin'||!isset($_SESSION['role'])){
+if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin' || !isset($_SESSION['role'])) {
     header('Location: index.php');
     exit();
 }
@@ -19,10 +19,10 @@ if (isset($_GET['delete_id']) && fetch_user($_GET['delete_id'])) {
 <div class="container mt-5">
     <h1 class="text-center">Employees</h1>
     <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search_bar">
         <a href="add_employee.php" class="btn btn-success">Add Employee</a>
-      </form>
-    
+    </form>
+
     <table class="table mt-2">
         <thead>
             <tr>
@@ -37,23 +37,21 @@ if (isset($_GET['delete_id']) && fetch_user($_GET['delete_id'])) {
                 <th scope="col">ACTIONS</th>
             </tr>
         </thead>
-        <tbody>
-            <?php foreach (fetch_all_users() as $user) :; ?>
-                <tr>
-                    <td><?php echo $user['id']; ?></td>
-                    <td><?php echo $user['username']; ?></td>
-                    <td><?php echo $user['firstname']; ?></td>
-                    <td><?php echo $user['lastname']; ?></td>
-                    <td><?php echo $user['email']; ?></td>
-                    <td><?php echo $user['password']; ?></td>
-                    <td><img src="assets/images/<?php echo $user['image']; ?>" alt="" style="width: 64px;"></td>
-                    <td><?php echo $user['role']; ?></td>
-                    <td>
-                        <a href="update_employee.php?id=<?php echo $user['id']; ?>" class="btn btn-primary">Edit</a>
-                        <a href="?delete_id=<?php echo $user['id']; ?>" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
+        <tbody id="main_table">
+            <tr>
+                <td>4</td>
+                <td>e89</td>
+                <td>someon</td>
+                <td>someon</td>
+                <td>someon</td>
+                <td>someon</td>
+                <td><img src="assets/images/default_profile_image.png" alt="" style="width: 64px;"></td>
+                <td>user</td>
+                <td>
+                    <a href="update_employee.php?id=" class="btn btn-primary">Edit</a>
+                    <a href="?delete_id=" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
